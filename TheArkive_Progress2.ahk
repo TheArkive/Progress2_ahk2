@@ -4,31 +4,31 @@
 ; (below the progress bar), the progress bar itself, and an optional title bar.
 ;
 ; Here are the defaults:
-;	Font                  = Verdana
-;	Font Size (subText)   = 8
-;	Font Size (mainText)  = subTextSize + 2
+;    Font                  = Verdana
+;    Font Size (subText)   = 8
+;    Font Size (mainText)  = subTextSize + 2
 ;   Main/SubText value    = blank unless specified
-;	display coords        = primary monitor
-;	default range         = 0-100
+;    display coords        = primary monitor
+;    default range         = 0-100
 ;
 ; ============================================================================================
 ; Create Progress Bar
-;	obj := progress2.New(rangeStart := 0, rangeEnd := 100, sOptions := "")
-;		> specify start and end range
-;		> specify options to initialize certain values on creation (optional)
+;    obj := progress2.New(rangeStart := 0, rangeEnd := 100, sOptions := "")
+;        > specify start and end range
+;        > specify options to initialize certain values on creation (optional)
 ;
 ; Methods:
 ;
-;	obj.Update(value := "", mainText := "", subText := "", range := "", title := "")
-;		> value = # ... within the specified range.
-;		> MainText / subText: update the text above / below the progress bar
-;		> If you want to clear the mainText or subText pass a space, ie. " "
-;		> To leave mainText / SubText unchanged, pass a zero-length string, ie. ""
+;    obj.Update(value := "", mainText := "", subText := "", range := "", title := "")
+;        > value = # ... within the specified range.
+;        > MainText / subText: update the text above / below the progress bar
+;        > If you want to clear the mainText or subText pass a space, ie. " "
+;        > To leave mainText / SubText unchanged, pass a zero-length string, ie. ""
 ;       >>> With this "range" parameter you must specify a range to change it.  A blank value will do nothing.
 ;       >>> With this "title" parameter you must specify a title to change it.  A blank value will do nothing.
 ;
-;	obj.Close()
-;		> closes the progress bar
+;    obj.Close()
+;        > closes the progress bar
 ;
 ;   obj.Range("#-#")
 ;       > Redefine the range on the fly.
@@ -74,103 +74,105 @@
 ;         It is up to the coder to decide how to check obj.abort, and how to
 ;         respond when obj.abort = true
 ;
-;	fontFace:font_str
-;		> set the font for MainText / SubText
+;    fontFace:font_str
+;        > set the font for MainText / SubText
 ;
-;	fontSize:###
-;		> set font size for MainText / SubText (MainText is 2 pts larger than SubText)
+;    fontSize:###
+;        > set font size for MainText / SubText (MainText is 2 pts larger than SubText)
 ;
-;	mainText:text_str
-;		> creates the Progress Bar with specified mainText (above the progress bar)
+;    mainText:text_str
+;        > creates the Progress Bar with specified mainText (above the progress bar)
 ;
-;	mainTextAlign:left/right/center
-;		> specifies alignment of mainText element.
+;    mainTextAlign:left/right/center
+;        > specifies alignment of mainText element.
 ;
-;	mainTextSize:#
-;		> sets custom size for mainText element.
+;    mainTextSize:#
+;        > sets custom size for mainText element.
 ;
-;	modal:Hwnd
-;		> same as parent, but also disables the parent window while progressbar is active
+;    modal:Hwnd
+;        > same as parent, but also disables the parent window while progressbar is active
 ;
-;	parent:Hwnd
-;		> defines the parent GUI window, and prevents a taskbar icon from appearing
+;    parent:Hwnd
+;        > defines the parent GUI window, and prevents a taskbar icon from appearing
 ;
-;	start:#
-;		> defines the starting numeric withing the specified range on creation
+;    start:#
+;        > defines the starting numeric withing the specified range on creation
 ;
-;	subText:text_str
-;		> creates the Pogress Bar with specified subText (below the progress bar)
+;    subText:text_str
+;        > creates the Pogress Bar with specified subText (below the progress bar)
 ;
-;	subTextAlign:left/right/center
-;		> specifies alignment of subText element.
+;    subTextAlign:left/right/center
+;        > specifies alignment of subText element.
 ;
-;	title:title_str
-;		> Defines a title and ensures there is a title bar.  This allows normal moving of the
-;		  progress bar by click-dragging the title bar.  No title hides the title bar and
-;		  prevents the window from being moved by the mouse (by normal means).
+;    title:title_str
+;        > Defines a title and ensures there is a title bar.  This allows normal moving of the
+;          progress bar by click-dragging the title bar.  No title hides the title bar and
+;          prevents the window from being moved by the mouse (by normal means).
 ;
-;	w:###
-;		> sets a specific pixel width for the progress bar
+;    w:###
+;        > sets a specific pixel width for the progress bar
 ;
-;	x:###  And  y:###  (specify both and separate by comma in options string)
-;		> sets custom x/y coords to display the progress bar window.  Specify both or none.
+;    x:###  And  y:###  (specify both and separate by comma in options string)
+;        > sets custom x/y coords to display the progress bar window.  Specify both or none.
 ;
+
+
+
 ; ============================================================================================
 ; Example
 ; ============================================================================================
-class app {
-    Static prog := "" ; progress bar super global
-         , clicks := 0
-}
+; Global prog, clicks := 0
 
-g := Gui()
-g.OnEvent("close",close_gui)
-g.OnEvent("escape",close_gui)
-g.Add("Text","w600 h300","Test GUI")
-g.Add("Button",,"Test Progress - click 3 times slowly").OnEvent("click",click_btn)
-g.show("x200 y200")
+; g := Gui()
+; g.OnEvent("close",close_gui)
+; g.OnEvent("escape",close_gui)
+; g.Add("Text","w600 h300","Test GUI")
+; g.Add("Button",,"Test Progress - click 3 times slowly").OnEvent("click",click_btn)
+; g.show("x200 y200")
 
-check_status() {
-    If (app.prog.abort) {
-        Msgbox "You clicked cancel."
-        app.prog.abort := false ; This is only for the example, you would not normally do this.
-    }                           ; Normally you use the Cancel button in a loop, and you keep checking for [ prog.abort = true ].
-}                               ; When you encounter [ prog.abort = true ] you decide how to handle it in your code.
+; check_status() {
+    ; Global prog
+    ; If (prog.abort) {
+        ; Msgbox "You clicked cancel."
+        ; prog.abort := false ; This is only for the example, you would not normally do this.
+    ; }                           ; Normally you use the Cancel button in a loop, and you keep checking for [ prog.abort = true ].
+; }                               ; When you encounter [ prog.abort = true ] you decide how to handle it in your code.
 
-click_btn(p*) {
-	If (app.clicks = 0) {
-		options := "mainText:Test Main Text,subText:Test Sub Text,title:test title,"
-		options .= "start:25,parent:" g.hwnd ",Cancel:1"
-		app.prog := progress2(0,100,options)
-        SetTimer check_status, 50
-        app.clicks++
-	} Else If (app.clicks = 1) {
-        app.prog.Title := "Title change!!"
-        app.prog.MainText := "Main Text change!!"
-        app.prog.SubText := "Sub Text change!!"
-        app.prog.Value := 50
-        app.clicks++
-    } Else if (app.clicks = 2) {
-        Msgbox "Progress value: " app.prog.Value "`n" ; get property values
-             . "Title: " app.prog.Title "`n"
-             . "MainText: " app.prog.MainText "`n"
-             . "SubText: " app.prog.SubText "`n"
-             . "Range: " app.prog.Range "`n"
-             . "Min range: " app.prog.RangeMin "`n"
-             . "Max range: " app.prog.RangeMax
+; click_btn(p*) {
+    ; Global prog, clicks
+    
+    ; If (clicks = 0) {
+        ; options := "mainText:Test Main Text,subText:Test Sub Text,title:test title,"
+        ; options .= "start:25,parent:" g.hwnd ",Cancel:1"
+        ; prog := progress2(0,100,options)
+        ; SetTimer check_status, 50
+        ; clicks++
+    ; } Else If (clicks = 1) {
+        ; prog.Title := "Title change!!"
+        ; prog.MainText := "Main Text change!!"
+        ; prog.SubText := "Sub Text change!!"
+        ; prog.Value := 50
+        ; clicks++
+    ; } Else if (clicks = 2) {
+        ; Msgbox "Progress value: " prog.Value "`n" ; get property values
+             ; . "Title: " prog.Title "`n"
+             ; . "MainText: " prog.MainText "`n"
+             ; . "SubText: " prog.SubText "`n"
+             ; . "Range: " prog.Range "`n"
+             ; . "Min range: " prog.RangeMin "`n"
+             ; . "Max range: " prog.RangeMax
         
-        app.prog.Update(75,"Main Text change again!","Sub Text change again!!",,"Title change again!!")
-		Sleep 1000
-        SetTimer check_status, 0
-        app.prog.Close()
-        app.prog := "" ; needed for this example to work properly
-        app.clicks := 0
-    }
-}
+        ; prog.Update(75,"Main Text change again!","Sub Text change again!!",,"Title change again!!")
+        ; Sleep 1000
+        ; SetTimer check_status, 0
+        ; prog.Close() ; Close with .Close() method.
+        ; clicks := 0  ; Doing [ prog := "" ] won't work due to attached GUI and gui callback method.
+    ; }                ; Of course prog can still be overwritten with another instance of itself.
+; }
 
-close_gui(g) {
-	ExitApp
-}
+; close_gui(g) {
+    ; ExitApp
+; }
 ; ============================================================================================
 ; End Example
 ; ============================================================================================
@@ -193,10 +195,10 @@ class progress2 {
     abort := false                          ; has Cancel been clicked?
     hwnd := 0                               ; the GUI hwnd containing the progress bar
     
-	__New(rangeStart := 0, rangeEnd := 100, sOptions := "") {
-		this.rangeStart := rangeStart, this.rangeEnd := rangeEnd
-		
-		optArr := StrSplit(sOptions,Chr(44))
+    __New(rangeStart := 0, rangeEnd := 100, sOptions := "") {
+        this.rangeStart := rangeStart, this.rangeEnd := rangeEnd
+        
+        optArr := StrSplit(sOptions,Chr(44))
         Loop optArr.Length {
             valArr := StrSplit(optArr[A_Index],":")
             v := valArr[1]
@@ -207,41 +209,42 @@ class progress2 {
             this.%valArr[1]% := valArr[2]
         }
         
-		this.ShowProgress()
-	}
-	ShowProgress() {
+        this.ShowProgress()
+    }
+    ShowProgress() {
         x := "", y := ""
-		showTitle := this._title ? "" : " -Caption +0x40000" ; 0x40000 = thick border
-		range := this.rangeStart "-" this.rangeEnd
+        showTitle := this._title ? "" : " -Caption +0x40000" ; 0x40000 = thick border
+        range := this.rangeStart "-" this.rangeEnd
         
         _styles := (this.AlwaysOnTop ? "AlwaysOnTop " : "") "-SysMenu " showTitle " +E0x02000000 +0x02000000"
-		progress2_gui := Gui(_styles,this._title)
-		this.hwnd := progress2_gui.hwnd
+        progress2_gui := Gui(_styles,this._title)
+        this.hwnd := progress2_gui.hwnd
         
-		progress2_gui.SetFont("s" this.mainTextSize,this.fontFace)
-		align := this.mainTextAlign
-		mT := progress2_gui.AddText("vMainText " align " w" this.width,this._mainText)
-		
+        progress2_gui.SetFont("s" this.mainTextSize,this.fontFace)
+        align := this.mainTextAlign
+        mT := progress2_gui.AddText("vMainText " align " w" this.width,this._mainText)
+        
         progress2_gui.SetFont("s" this.fontSize)
-		prog_ctl := progress2_gui.Add("Progress","vProgBar y+m xp w" this.width " Range" range,this.start)
-		
-		align := this.subTextAlign
-		sT := progress2_gui.AddText("vSubText " align " w" this.width,this._subText)
-		
+        prog_ctl := progress2_gui.Add("Progress","vProgBar y+m xp w" this.width " Range" range,this.start)
+        
+        align := this.subTextAlign
+        sT := progress2_gui.AddText("vSubText " align " w" this.width,this._subText)
+        
         If (this.cancel) {
             btn := progress2_gui.Add("Button","vCancel w75 x" (this.width-75+progress2_gui.MarginX), "Cancel")
-            btn.OnEvent("click", ObjBindMethod(this,"gui_events"))
+            progress2_gui.DefineProp("gui_events",{Call:(ctl,i) => ((ctl.name="Cancel")?(this.abort:=true):"")})
+            btn.OnEvent("click", progress2_gui.gui_events) ; attach method to gui, not class
         }
         
-		If (this.parent) {
-			WinGetPos &pX, &pY, &pW, &pH, "ahk_id " this.parent
-			Cx := pX + (pW/2), Cy := pY + (pH/2)
-			progress2_gui.Opt("+Owner" this.parent)
-			
-			If (this.modal)
-				WinSetEnabled 0, "ahk_id " this.parent
-		}
-		progress2_gui.Show(" NA NoActivate Hide") ; coords ??
+        If (this.parent) {
+            WinGetPos &pX, &pY, &pW, &pH, "ahk_id " this.parent
+            Cx := pX + (pW/2), Cy := pY + (pH/2)
+            progress2_gui.Opt("+Owner" this.parent)
+            
+            If (this.modal)
+                WinSetEnabled 0, "ahk_id " this.parent
+        }
+        progress2_gui.Show(" NA NoActivate Hide") ; coords ??
         progress2_gui.GetPos(,,&w,&h)
         
         If (this.x = "" Or this.y = "") And this.parent
@@ -250,27 +253,19 @@ class progress2 {
         progress2_gui.Show((!x && !y) ? "" : "x" x " y" y)
         
         this.x := x, this.y := y
-		this.guiHwnd := progress2_gui.hwnd
-		this.gui := progress2_gui
-	}
-    gui_events(ctl, info) {
-        If (ctl.name = "Cancel")
-            this.abort := true
+        this.gui := progress2_gui
     }
-	Update(value := "", mainText := "", subText := "", range := "", title := "") {
-		If (value != "")
-			this.gui["ProgBar"].Value := value
-		If (mainText)
-			this.gui["MainText"].Text := mainText
-		If (subText)
-			this.gui["SubText"].Text := subText
+    Update(value := "", mainText := "", subText := "", range := "", title := "") {
+        If (value != "")
+            this.gui["ProgBar"].Value := value
+        If (mainText)
+            this.gui["MainText"].Text := mainText
+        If (subText)
+            this.gui["SubText"].Text := subText
         If (range)
             this.gui["ProgBar"].Opt("Range" range)
         If (title)
             this.gui.Title := title
-    }
-    Range(range := "0-100") {
-        this.gui["ProgBar"].Opt("Range" range)
     }
     Title {
         set => this.gui.Title := value
@@ -305,9 +300,15 @@ class progress2 {
         this.rangeEnd := (_in?m[2]:100)
         this.gui["ProgBar"].Opt("Range" this.rangeStart "-" this.rangeEnd)
     }
-	Close() {
-        this.gui.Destroy()
-		If (this.modal)
-			WinSetEnabled 1, "ahk_id " this.parent
-	}
+    Close() {
+        If (IsObject(this.gui))
+            this.gui.Destroy(), this.gui := "" ; completely delete this.gui to prevent destroying non-existent gui on __Delete()
+        If (this.modal) {
+            WinSetEnabled 1, "ahk_id " this.parent
+            this.modal := this.parent := 0 ; prevent __Delete() from triggering this again
+        }
+    }
+    __Delete() {
+        this.Close()
+    }
 }
